@@ -7,7 +7,6 @@ import math
 
 class LCP_CaterpillarEnv(gym.Env):
     def __init__(self, render=False):
-        # 1. 초기화
         try: p.disconnect()
         except: pass
         
@@ -22,7 +21,6 @@ class LCP_CaterpillarEnv(gym.Env):
         p.setGravity(0, 0, -9.81)
         p.setTimeStep(1./240.)
 
-        # 2. 로봇 및 바닥
         plane_id = p.loadURDF("plane.urdf")
         p.changeDynamics(plane_id, -1, lateralFriction=0.5) 
 
@@ -31,8 +29,7 @@ class LCP_CaterpillarEnv(gym.Env):
         
         my_urdf = os.path.join(os.getcwd(), "Capsule_robot_description", "urdf", "Capsule_robot.urdf")
         self.robot_id = p.loadURDF(my_urdf, self.start_pos, self.start_orn, useFixedBase=False)
-
-        # 3. 관절 설정
+        
         self.joints = []
         for i in range(p.getNumJoints(self.robot_id)):
             info = p.getJointInfo(self.robot_id, i)
@@ -42,7 +39,6 @@ class LCP_CaterpillarEnv(gym.Env):
         
         self.num_joints = len(self.joints)
 
-        # 4. 공간 정의
         self.action_space = gym.spaces.Box(low=0, high=1, shape=(self.num_joints,), dtype=np.float32)
         obs_dim = 13 + (2 * self.num_joints) + 2 
         self.observation_space = gym.spaces.Box(low=-np.inf, high=np.inf, shape=(obs_dim,), dtype=np.float32)
@@ -57,9 +53,8 @@ class LCP_CaterpillarEnv(gym.Env):
         self.REAL_MAX_TORQUE = 0.00328 * 1e-3 
         self.FORCE_SCALING = 5000.0 
 
-        # [핵심] S자 파동 파라미터 (이게 있어야 학습이 됩니다!)
-        self.wave_freq = 0.03  # 적절한 속도
-        self.wave_lag = 1.5    # 예쁜 S자 형태
+        self.wave_freq = 0.03  
+        self.wave_lag = 1.5    
 
         self.current_step = 0
         self.max_steps = 2000
@@ -69,24 +64,18 @@ class LCP_CaterpillarEnv(gym.Env):
         self.current_action = action
         t = self.current_step
         
-        # --- (A) 잔차 학습 (Residual Learning) 적용 ---
-        
-        # 1. 기본 S자 파동 (선생님)
-        # 로봇이 따라해야 할 '정답지'를 미리 계산합니다.
+
         base_signal = np.array([math.sin(t * self.wave_freq - i * self.wave_lag) for i in range(self.num_joints)])
         
-        # 2. AI의 보정 (학생)
+
         # action(0~1) -> (-1~1)로 변환 후, 0.5배 축소하여 '보정' 용도로만 사용
         ai_correction = (action - 0.5) * 2.0 
-        
-        # 3. 최종 명령 = 기본 파동 + AI 보정
+
         # 이렇게 하면 AI가 조금만 실수해도 기본 파동 덕분에 앞으로 잘 갑니다.
         # 즉, "가만히 있으면 중간은 간다"는 걸 알기에 엔트로피가 낮아집니다.
         final_command = base_signal + (ai_correction * 0.5)
         
-        # 4. 모터 구동
         for i, joint_idx in enumerate(self.joints):
-            # 1.5배 증폭하여 꺾임각 확보
             target_angle = final_command[i] * 1.5 
             torque = self.REAL_MAX_TORQUE * self.FORCE_SCALING
             
@@ -114,7 +103,6 @@ class LCP_CaterpillarEnv(gym.Env):
 
         reward = reward_forward + reward_energy + reward_stability + reward_lazy
 
-        # --- (C) 종료 조건 ---
         terminated = False
         if base_pos[2] > 0.5 or abs(roll) > 1.5 or abs(pitch) > 1.5: 
             terminated = True
@@ -143,7 +131,6 @@ class LCP_CaterpillarEnv(gym.Env):
         j_angles = [s[0] for s in joint_states]
         j_vels = [s[1] for s in joint_states]
         
-        # 관측값에도 동일한 박자(freq) 정보를 줍니다.
         freq = self.wave_freq 
         phase = [math.sin(self.current_step * freq), math.cos(self.current_step * freq)]
 

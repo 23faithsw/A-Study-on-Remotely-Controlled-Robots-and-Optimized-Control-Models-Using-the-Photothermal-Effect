@@ -22,13 +22,14 @@
 ### 1. Install Dependencies
 ```bash
 pip install gymnasium stable-baselines3 pybullet shimmy numpy matplotlib
-2. Train the Agent
+
+### 2. Train the Agent
 Bash
 
 python train_final.py
 Training logs will be saved in the final_logs directory.
 
-3. Verify & Visualize Results
+### 3. Verify & Visualize Results
 Bash
 
 python verify_emergence.py

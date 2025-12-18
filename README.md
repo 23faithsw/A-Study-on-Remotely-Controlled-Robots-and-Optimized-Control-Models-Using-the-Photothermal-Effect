@@ -21,15 +21,20 @@
 
 ### 1. Install Dependencies
 
-pip install gymnasium stable-baselines3 pybullet shimmy numpy matplotlib
+```bash
+pip install gymnasium stable-baselines3 pybullet shimmy numpy matplotlib\
+```
 
 ### 2. Train the Agent
 
+```bash
 python train_final.py
+```
 Training logs will be saved in the final_logs directory.
 
 ### 3. Verify & Visualize Results
 
+```bash
 python verify_emergence.py
-
+```
 This script loads the trained model and generates performance analysis graphs.

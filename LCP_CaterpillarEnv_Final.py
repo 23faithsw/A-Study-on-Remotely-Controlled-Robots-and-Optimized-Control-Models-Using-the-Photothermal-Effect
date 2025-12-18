@@ -26,9 +26,10 @@ class LCP_CaterpillarEnv(gym.Env):
 
         self.start_pos = [0, 0, 0.05]
         self.start_orn = p.getQuaternionFromEuler([0, 0, 0])
-        
-        my_urdf = os.path.join(os.getcwd(), "Capsule_robot_description", "urdf", "Capsule_robot.urdf")
-        self.robot_id = p.loadURDF(my_urdf, self.start_pos, self.start_orn, useFixedBase=False)
+
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        urdf_path = os.path.join(current_dir, "urdf", "Capsule_robot.urdf")
+        self.robot_id = p.loadURDF(urdf_path, self.start_pos, self.start_orn, useFixedBase=False)
         
         self.joints = []
         for i in range(p.getNumJoints(self.robot_id)):

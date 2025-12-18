@@ -3,8 +3,7 @@
 
 -----
 
-## Research Topic: Control Optimization of a Remotely Operated Robot using the Photothermal Effect
-
+## Research Topic: A Study on Remotely Controlled Robots and Optimized Control Models Using the Photothermal Effect
 ## Research Methods
 
   * Building a simulation environment using **PyBullet**.

@@ -13,14 +13,11 @@
 ## Key Results
 
   * **<img width="563" height="362" alt="rew_mean" src="https://github.com/user-attachments/assets/333efae9-a4a0-4f69-a14d-4703a7f6a8d0" />, <img width="843" height="363" alt="enf" src="https://github.com/user-attachments/assets/c32c215f-efb5-436c-b20f-e265a68ee316" />. <img width="640" height="364" alt="enf_coef_loss" src="https://github.com/user-attachments/assets/b9fb8526-8a6b-44e1-bb4b-2121294d7207" />**
-  * <img width="563" height="362" alt="rew_mean" src="https://github.com/user-attachments/assets/333efae9-a4a0-4f69-a14d-4703a7f6a8d0" />
-  * <img width="843" height="363" alt="enf" src="https://github.com/user-attachments/assets/c32c215f-efb5-436c-b20f-e265a68ee316" />
-  * <img width="640" height="364" alt="enf_coef_loss" src="https://github.com/user-attachments/assets/b9fb8526-8a6b-44e1-bb4b-2121294d7207" />
+
       * *Training results of the SAC model (TensorBoard logs)*
 
     
   * **<img width="1858" height="1053" alt="발표용 그래프" src="https://github.com/user-attachments/assets/4d6f47b8-83ef-4579-8db9-e9277e630e12" />**
-  * <img width="1858" height="1053" alt="발표용 그래프" src="https://github.com/user-attachments/assets/4d6f47b8-83ef-4579-8db9-e9277e630e12" />
 
       * *Performance analysis of the optimized model: Joint actuation heatmap and 2D trajectory*
 
